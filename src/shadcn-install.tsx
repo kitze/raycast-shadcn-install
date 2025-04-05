@@ -74,7 +74,7 @@ export default function Command() {
         let errorBody = "Unknown error";
         try {
           errorBody = await response.text();
-        } catch (e) {
+        } catch (_e) {
           /* ignore */
         }
         throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorBody}`);
@@ -113,17 +113,45 @@ export default function Command() {
         // Assume direct array structure like Shadcn's index.json for simplicity
         console.warn(`Processing unknown registry type: ${registry.name}. Assuming direct array structure.`);
         try {
-          processedComponents = (rawData as any[]).map((comp) => ({
-            // Add type safety for fallback
-            name: comp.name ?? "Unknown Component",
-            description: typeof comp.description === "string" ? comp.description : undefined,
-            files: Array.isArray(comp.files) ? comp.files.map(String) : [], // Ensure files is string[]
-            dependencies: Array.isArray(comp.dependencies) ? comp.dependencies.map(String) : undefined,
-            registryDependencies: Array.isArray(comp.registryDependencies)
-              ? comp.registryDependencies.map(String)
-              : undefined,
-            type: typeof comp.type === "string" ? comp.type : "unknown",
-          }));
+          processedComponents = (rawData as unknown[]).map((comp: unknown) => {
+            // Perform type checks since comp is now unknown
+            const name =
+              typeof comp === "object" && comp !== null && "name" in comp && typeof comp.name === "string"
+                ? comp.name
+                : "Unknown Component";
+            const description =
+              typeof comp === "object" && comp !== null && "description" in comp && typeof comp.description === "string"
+                ? comp.description
+                : undefined;
+            const files =
+              typeof comp === "object" && comp !== null && "files" in comp && Array.isArray(comp.files)
+                ? comp.files.map(String)
+                : [];
+            const dependencies =
+              typeof comp === "object" && comp !== null && "dependencies" in comp && Array.isArray(comp.dependencies)
+                ? comp.dependencies.map(String)
+                : undefined;
+            const registryDependencies =
+              typeof comp === "object" &&
+              comp !== null &&
+              "registryDependencies" in comp &&
+              Array.isArray(comp.registryDependencies)
+                ? comp.registryDependencies.map(String)
+                : undefined;
+            const type =
+              typeof comp === "object" && comp !== null && "type" in comp && typeof comp.type === "string"
+                ? comp.type
+                : "unknown";
+
+            return {
+              name,
+              description,
+              files,
+              dependencies,
+              registryDependencies,
+              type,
+            };
+          });
         } catch (fallbackError) {
           console.error(`Error processing fallback registry ${registry.name}:`, fallbackError);
           throw new Error(`Failed to process data structure for registry: ${registry.name}`);
@@ -169,11 +197,11 @@ export default function Command() {
         message: componentJsonUrl,
       });
       await closeMainWindow();
-    } catch (error) {
+    } catch (_error) {
       await showToast({
         style: Toast.Style.Failure,
         title: "Failed to Paste URL",
-        message: String(error),
+        message: String(_error),
       });
     }
   };
@@ -252,15 +280,17 @@ ${component.files?.length ? `**Files:**\n${component.files.map((file) => `* \`${
               detail={<List.Item.Detail markdown={detailMarkdown} />}
               actions={
                 <ActionPanel>
-                  {/* Primary action: Paste Component JSON URL */}
-                  <Action
-                    title="Paste Component JSON URL"
-                    icon={Icon.Clipboard} // Use paste/clipboard icon
-                    onAction={() => handlePasteComponentUrl(selectedRegistry, component.name)}
+                  {/* Primary action: Paste Install Command with full URL */}
+                  <Action.Paste
+                    title="Paste Install Command (with URL)"
+                    content={`npx shadcn-ui@latest add ${selectedRegistry.componentJsonBaseUrl}${component.name}.json`}
                     shortcut={{ modifiers: [], key: "enter" }}
                   />
-                  {/* Secondary action: Copy just the name */}
-                  <Action.CopyToClipboard title="Copy Component Name" content={component.name} />
+                  {/* Secondary action: Copy Install Command (name only) */}
+                  <Action.CopyToClipboard
+                    title="Copy Install Command (name only)"
+                    content={`npx shadcn-ui@latest add ${component.name}`}
+                  />
                   {/* Back action */}
                   <Action
                     title="Go Back to Registries"
