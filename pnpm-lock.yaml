@@ -23,19 +23,19 @@ importers:
     devDependencies:
       '@raycast/eslint-config':
         specifier: ^2.0.4
-        version: 2.0.4(eslint@9.23.0)(prettier@3.5.3)(typescript@5.8.2)
+        version: 2.0.4(eslint@9.23.0)(prettier@3.8.4)(typescript@5.8.2)
       '@types/node':
-        specifier: 22.13.10
+        specifier: ^22.13.10
         version: 22.13.10
       '@types/react':
-        specifier: 19.0.10
+        specifier: ^19.0.10
         version: 19.0.10
       eslint:
-        specifier: ^9.22.0
+        specifier: ^9.23.0
         version: 9.23.0
       prettier:
-        specifier: ^3.5.3
-        version: 3.5.3
+        specifier: ^3.8.4
+        version: 3.8.4
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
@@ -964,6 +964,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -1022,8 +1023,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier@3.5.3:
-    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+  prettier@3.8.4:
+    resolution: {integrity: sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -1507,14 +1508,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@raycast/eslint-config@2.0.4(eslint@9.23.0)(prettier@3.5.3)(typescript@5.8.2)':
+  '@raycast/eslint-config@2.0.4(eslint@9.23.0)(prettier@3.8.4)(typescript@5.8.2)':
     dependencies:
       '@eslint/js': 9.23.0
       '@raycast/eslint-plugin': 2.0.5(eslint@9.23.0)(typescript@5.8.2)
       eslint: 9.23.0
       eslint-config-prettier: 10.1.1(eslint@9.23.0)
       globals: 16.0.0
-      prettier: 3.5.3
+      prettier: 3.8.4
       typescript: 5.8.2
       typescript-eslint: 8.29.0(eslint@9.23.0)(typescript@5.8.2)
     transitivePeerDependencies:
@@ -2152,7 +2153,7 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.5.3: {}
+  prettier@3.8.4: {}
 
   punycode@2.3.1: {}
 
